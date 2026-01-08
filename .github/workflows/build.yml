@@ -1,0 +1,40 @@
+name: Build DLL
+
+# Trigger: Run this whenever you push code to the 'main' or 'master' branch
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: windows-latest  # We use a Windows VM since it's a .NET Framework/Core project
+
+    steps:
+    # 1. Check out your code (download it to the VM)
+    - uses: actions/checkout@v4
+
+    # 2. Setup .NET (Ensure the VM has .NET 8 or whichever version you use)
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    # 3. Restore Dependencies (Nuget packages)
+    - name: Restore dependencies
+      run: dotnet restore
+
+    # 4. Build the Project in Release Mode
+    # --no-restore makes it faster since we just did it
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    # 5. Upload the DLL as an "Artifact"
+    # This takes the file from the VM and saves it to your GitHub Actions tab
+    - name: Upload DLL
+      uses: actions/upload-artifact@v4
+      with:
+        name: GameCheatsFramework_DLL
+        # Update this path if your folder name is different!
+        path: "Game Cheats Framework/bin/Release/net8.0/Game_Cheats_Framework.dll"
