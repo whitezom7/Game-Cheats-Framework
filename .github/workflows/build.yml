@@ -25,16 +25,16 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
-    # 4. Build the Project in Release Mode
-    # --no-restore makes it faster since we just did it
+# 4. Build the Solution
+    # We point to the specific folder with quotes so the space doesn't break it
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build "Game Cheats Framework/Game Cheats Framework.csproj" --configuration Release --no-restore
 
-    # 5. Upload the DLL as an "Artifact"
-    # This takes the file from the VM and saves it to your GitHub Actions tab
+    # 5. Upload the DLL
     - name: Upload DLL
       uses: actions/upload-artifact@v4
       with:
         name: GameCheatsFramework_DLL
-        # Update this path if your folder name is different!
-        path: "Game Cheats Framework/bin/Release/net8.0/Game_Cheats_Framework.dll"
+        # The quotes are critical here because of the spaces in the folder name
+        # The ** wildcard finds the DLL regardless of .net version folder
+        path: "Game Cheats Framework/bin/Release/**/*.dll"
