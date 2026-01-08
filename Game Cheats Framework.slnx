@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="FrameworkTest/FrameworkTest.csproj" />
+  <Project Path="Game Cheats Framework/Game Cheats Framework.csproj" />
+</Solution>
